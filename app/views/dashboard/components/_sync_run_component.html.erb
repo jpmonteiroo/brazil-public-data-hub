@@ -1,0 +1,18 @@
+<article class="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <p class="font-semibold text-slate-900"><%= sync_run_component.sync_run.data_source.name %></p>
+      <p class="mt-1 text-sm text-slate-500">
+        <%= sync_run_component.sync_run.finished_at&.strftime("%d/%m/%Y %H:%M") || "Em andamento" %>
+      </p>
+    </div>
+    <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ring-1 <%= sync_run_component.badge_classes %>">
+      <%= sync_run_component.sync_run.status %>
+    </span>
+  </div>
+
+  <div class="mt-4 flex items-center justify-between gap-4 text-sm">
+    <span class="text-slate-500">Itens importados</span>
+    <span class="font-semibold text-slate-900"><%= sync_run_component.sync_run.items_count || 0 %></span>
+  </div>
+</article>

@@ -1,0 +1,18 @@
+<article class="<%= stat_card_component.container_classes %>">
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <p class="<%= stat_card_component.title_classes %>"><%= stat_card_component.title %></p>
+      <p class="<%= stat_card_component.value_classes %>"><%= stat_card_component.value %></p>
+    </div>
+
+    <% unless stat_card_component.dark? %>
+      <span class="rounded-2xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] <%= stat_card_component.badge_classes %>">
+        <%= stat_card_component.badge_text %>
+      </span>
+    <% end %>
+  </div>
+
+  <p class="<%= stat_card_component.reference_classes %>">
+    Referência <%= stat_card_component.reference %>
+  </p>
+</article>
