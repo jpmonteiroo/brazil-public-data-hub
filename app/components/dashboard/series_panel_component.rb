@@ -65,7 +65,7 @@ module Dashboard
           x = PADDING + (step * index)
           normalized = (value - min) / span
           y = PADDING + ((1 - normalized) * (CHART_HEIGHT - PADDING * 2))
-          [x, y]
+          [ x, y ]
         end
       end
     end

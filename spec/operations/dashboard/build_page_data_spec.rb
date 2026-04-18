@@ -27,11 +27,11 @@ RSpec.describe Dashboard::BuildPageData do
           states_count: states_snapshot
         },
         histories: {
-          selic: [selic_history_item],
-          ibc_br: [ibc_history_item]
+          selic: [ selic_history_item ],
+          ibc_br: [ ibc_history_item ]
         },
-        states: [state_snapshot],
-        recent_syncs: [sync_run]
+        states: [ state_snapshot ],
+        recent_syncs: [ sync_run ]
       )
     end
 

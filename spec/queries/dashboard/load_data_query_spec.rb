@@ -3,62 +3,52 @@ require "rails_helper"
 RSpec.describe Dashboard::LoadDataQuery do
   describe "#call" do
     let!(:bcb_source) do
-      create(
-        :data_source,
-        name: "Banco Central do Brasil",
-        slug: Constants::Sync::DATA_SOURCE_SLUGS[:bcb],
-        base_url: "https://api.bcb.gov.br",
-        active: true
-      )
+      DataSource.find_or_create_by!(slug: Constants::Sync::DATA_SOURCE_SLUGS[:bcb]) do |source|
+        source.name = "Banco Central do Brasil"
+        source.base_url = "https://api.bcb.gov.br"
+        source.active = true
+      end
     end
 
     let!(:ibge_source) do
-      create(
-        :data_source,
-        name: "IBGE",
-        slug: Constants::Sync::DATA_SOURCE_SLUGS[:ibge],
-        base_url: "https://servicodados.ibge.gov.br/api",
-        active: true
-      )
+      DataSource.find_or_create_by!(slug: Constants::Sync::DATA_SOURCE_SLUGS[:ibge]) do |source|
+        source.name = "IBGE"
+        source.base_url = "https://servicodados.ibge.gov.br/api"
+        source.active = true
+      end
     end
 
     let!(:selic) do
-      create(
-        :indicator,
-        data_source: bcb_source,
-        name: "Taxa Selic",
-        slug: Constants::Dashboard::INDICATOR_SLUGS[:selic],
-        category: "economico",
-        unit: "%",
-        source_code: "11",
-        active: true
-      )
+      Indicator.find_or_create_by!(slug: Constants::Dashboard::INDICATOR_SLUGS[:selic]) do |indicator|
+        indicator.data_source = bcb_source
+        indicator.name = "Taxa Selic"
+        indicator.category = "economico"
+        indicator.unit = "%"
+        indicator.source_code = "11"
+        indicator.active = true
+      end
     end
 
     let!(:ibc_br) do
-      create(
-        :indicator,
-        data_source: bcb_source,
-        name: "IBC-Br",
-        slug: Constants::Dashboard::INDICATOR_SLUGS[:ibc_br],
-        category: "economico",
-        unit: "indice",
-        source_code: "24363",
-        active: true
-      )
+      Indicator.find_or_create_by!(slug: Constants::Dashboard::INDICATOR_SLUGS[:ibc_br]) do |indicator|
+        indicator.data_source = bcb_source
+        indicator.name = "IBC-Br"
+        indicator.category = "economico"
+        indicator.unit = "indice"
+        indicator.source_code = "24363"
+        indicator.active = true
+      end
     end
 
     let!(:states_count) do
-      create(
-        :indicator,
-        data_source: ibge_source,
-        name: "Quantidade de estados",
-        slug: Constants::Dashboard::INDICATOR_SLUGS[:states_count],
-        category: "geografico",
-        unit: "total",
-        source_code: "localidades-estados",
-        active: true
-      )
+      Indicator.find_or_create_by!(slug: Constants::Dashboard::INDICATOR_SLUGS[:states_count]) do |indicator|
+        indicator.data_source = ibge_source
+        indicator.name = "Quantidade de estados"
+        indicator.category = "geografico"
+        indicator.unit = "total"
+        indicator.source_code = "localidades-estados"
+        indicator.active = true
+      end
     end
 
     let!(:selic_latest) do
@@ -189,14 +179,14 @@ RSpec.describe Dashboard::LoadDataQuery do
       expect(bundle.latest_snapshot(:selic)).to eq(selic_latest)
       expect(bundle.latest_snapshot(:ibc_br)).to eq(ibc_latest)
       expect(bundle.latest_snapshot(:states_count)).to eq(country_snapshot)
-      expect(bundle.history(:selic)).to eq([selic_latest, selic_previous])
-      expect(bundle.history(:ibc_br)).to eq([ibc_latest])
+      expect(bundle.history(:selic)).to eq([ selic_latest, selic_previous ])
+      expect(bundle.history(:ibc_br)).to eq([ ibc_latest ])
     end
 
     it "loads only the current state snapshots ordered by place name" do
       bundle = described_class.call
 
-      expect(bundle.states).to eq([acre_snapshot, bahia_snapshot])
+      expect(bundle.states).to eq([ acre_snapshot, bahia_snapshot ])
       expect(bundle.states).not_to include(old_state_snapshot)
     end
 

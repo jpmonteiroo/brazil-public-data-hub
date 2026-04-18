@@ -12,7 +12,7 @@ module Dashboard
           value.to_s
         end
 
-      [number, unit].compact.join(" ")
+      [ number, unit ].compact.join(" ")
     end
   end
 end

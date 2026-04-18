@@ -3,15 +3,33 @@ require "rails_helper"
 RSpec.describe SyncPublicData::BcbSourceSync do
   describe "#call" do
     let!(:data_source) do
-      create(:data_source, name: "Banco Central do Brasil", slug: "bcb", base_url: "https://api.bcb.gov.br", active: true)
+      DataSource.find_or_create_by!(slug: "bcb") do |source|
+        source.name = "Banco Central do Brasil"
+        source.base_url = "https://api.bcb.gov.br"
+        source.active = true
+      end
     end
 
     let!(:active_indicator_one) do
-      create(:indicator, data_source: data_source, name: "Selic", slug: "selic", category: "economico", unit: "%", source_code: "11", active: true)
+      Indicator.find_or_create_by!(slug: "selic") do |indicator|
+        indicator.data_source = data_source
+        indicator.name = "Selic"
+        indicator.category = "economico"
+        indicator.unit = "%"
+        indicator.source_code = "11"
+        indicator.active = true
+      end
     end
 
     let!(:active_indicator_two) do
-      create(:indicator, data_source: data_source, name: "IBC-Br", slug: "ibc_br", category: "economico", unit: "indice", source_code: "24363", active: true)
+      Indicator.find_or_create_by!(slug: "ibc_br") do |indicator|
+        indicator.data_source = data_source
+        indicator.name = "IBC-Br"
+        indicator.category = "economico"
+        indicator.unit = "indice"
+        indicator.source_code = "24363"
+        indicator.active = true
+      end
     end
 
     let!(:inactive_indicator) do

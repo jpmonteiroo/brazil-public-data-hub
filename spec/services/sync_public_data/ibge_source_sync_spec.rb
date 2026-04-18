@@ -3,20 +3,22 @@ require "rails_helper"
 RSpec.describe SyncPublicData::IbgeSourceSync do
   describe "#call" do
     let!(:data_source) do
-      create(:data_source, name: "IBGE", slug: "ibge", base_url: "https://servicodados.ibge.gov.br/api", active: true)
+      DataSource.find_or_create_by!(slug: "ibge") do |source|
+        source.name = "IBGE"
+        source.base_url = "https://servicodados.ibge.gov.br/api"
+        source.active = true
+      end
     end
 
     let!(:states_count_indicator) do
-      create(
-        :indicator,
-        data_source: data_source,
-        name: "Quantidade de estados",
-        slug: Constants::Sync::INDICATOR_SLUGS[:states_count],
-        category: "geografico",
-        unit: "total",
-        source_code: "localidades-estados",
-        active: true
-      )
+      Indicator.find_or_create_by!(slug: Constants::Sync::INDICATOR_SLUGS[:states_count]) do |indicator|
+        indicator.data_source = data_source
+        indicator.name = "Quantidade de estados"
+        indicator.category = "geografico"
+        indicator.unit = "total"
+        indicator.source_code = "localidades-estados"
+        indicator.active = true
+      end
     end
 
     before do

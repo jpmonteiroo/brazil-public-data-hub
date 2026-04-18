@@ -3,20 +3,22 @@ require "rails_helper"
 RSpec.describe Importers::ImportIbgeStates do
   describe "#call" do
     let!(:data_source) do
-      create(:data_source, name: "IBGE", slug: "ibge", base_url: "https://servicodados.ibge.gov.br/api", active: true)
+      DataSource.find_or_create_by!(slug: "ibge") do |source|
+        source.name = "IBGE"
+        source.base_url = "https://servicodados.ibge.gov.br/api"
+        source.active = true
+      end
     end
 
     let!(:indicator) do
-      create(
-        :indicator,
-        data_source: data_source,
-        name: "Quantidade de estados",
-        slug: "states_count",
-        category: "geografico",
-        unit: "total",
-        source_code: "localidades-estados",
-        active: true
-      )
+      Indicator.find_or_create_by!(slug: "states_count") do |record|
+        record.data_source = data_source
+        record.name = "Quantidade de estados"
+        record.category = "geografico"
+        record.unit = "total"
+        record.source_code = "localidades-estados"
+        record.active = true
+      end
     end
 
     let(:payload) do

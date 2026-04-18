@@ -3,20 +3,22 @@ require "rails_helper"
 RSpec.describe Importers::ImportBcbIndicator do
   describe "#call" do
     let!(:data_source) do
-      create(:data_source, name: "Banco Central do Brasil", slug: "bcb", base_url: "https://api.bcb.gov.br", active: true)
+      DataSource.find_or_create_by!(slug: "bcb") do |source|
+        source.name = "Banco Central do Brasil"
+        source.base_url = "https://api.bcb.gov.br"
+        source.active = true
+      end
     end
 
     let!(:indicator) do
-      create(
-        :indicator,
-        data_source: data_source,
-        name: "Taxa Selic",
-        slug: "selic",
-        category: "economico",
-        unit: "%",
-        source_code: "11",
-        active: true
-      )
+      Indicator.find_or_create_by!(slug: "selic") do |record|
+        record.data_source = data_source
+        record.name = "Taxa Selic"
+        record.category = "economico"
+        record.unit = "%"
+        record.source_code = "11"
+        record.active = true
+      end
     end
 
     let(:payload) do

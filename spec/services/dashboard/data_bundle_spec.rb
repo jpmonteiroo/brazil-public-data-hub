@@ -14,8 +14,8 @@ RSpec.describe Dashboard::DataBundle do
   let(:indicators) { { selic: :selic_indicator } }
   let(:latest_snapshots) { { selic: :latest_snapshot } }
   let(:histories) { { selic: %i[first second] } }
-  let(:states) { [:acre] }
-  let(:recent_syncs) { [:sync_run] }
+  let(:states) { [ :acre ] }
+  let(:recent_syncs) { [ :sync_run ] }
 
   describe "#indicator" do
     it "returns the indicator by key" do
